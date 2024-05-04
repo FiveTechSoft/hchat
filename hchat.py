@@ -248,7 +248,7 @@ Continuing to use means that you accept the above point(s)
     chatbot.new_conversation(switch_to=True)
     stream_output = True
 
-    print("Login successfully! 🎉\nYou can input `/help` to open the command menu.\n")
+    print("Login successfully! You can input `/help` to open the command menu.\n")
 
     if continued_conv:
         ids = chatbot.get_remote_conversations(replace_conversation_list=True)
@@ -296,4 +296,12 @@ Continuing to use means that you accept the above point(s)
                 print("\033[36m< " + chatbot.chat(userInput).wait_until_done().strip() + "\033[0m" )
 
 if __name__ == '__main__':
-    cli()
+    try:
+       cli()
+    except Exception as e:
+       with open("pyerror.log", "w") as f:
+          tb = traceback.extract_tb(sys.exc_info()[2])
+          for frame in tb:
+             f.write(f"File {frame.filename}, line {frame.lineno}, in {frame.name}\n")
+             f.write(f"  {frame.line}\n")
+          f.write(f"Error: {e}\n")   
